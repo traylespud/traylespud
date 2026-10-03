@@ -34,3 +34,8 @@ well-commented example code.
 
 Anything used as input (target-page HTML, existing scripts, notes) goes in
 `reference/`. It is not bundled into the build.
+
+## Google Cloud workbench
+
+Setup plan for the user's Google Cloud VM and Translation API key is in
+`docs/gcp-setup.md`. Follow its privacy rules and ask before billable steps.
