@@ -94,3 +94,8 @@ self-contained so it's easy to reason about.
 Use `reference/` to drop in anything that helps you build: saved HTML of a
 target page, existing scripts you're adapting, or plain notes. Nothing there is
 bundled into your userscript — it's just a scratch area for you.
+
+## The `learning/` folder
+
+Step-by-step lessons on how userscripts, extensions, and the browser work,
+built around one real project. Start with [`learning/README.md`](learning/README.md).
