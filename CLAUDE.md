@@ -39,3 +39,9 @@ Anything used as input (target-page HTML, existing scripts, notes) goes in
 
 Setup plan for the user's Google Cloud VM and Translation API key is in
 `docs/gcp-setup.md`. Follow its privacy rules and ask before billable steps.
+
+For gcloud questions, check `gcloud <command> --help` first (it matches the
+installed version), then the official reference at
+cloud.google.com/sdk/gcloud/reference. Explain in plain language, and say
+whether a command costs money before running it. Keep `docs/gcloud-notes.md`
+(the user's personal cheat sheet) up to date when something new is learned.

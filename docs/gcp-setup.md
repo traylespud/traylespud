@@ -9,7 +9,7 @@ costs money** (marked 💲).
 
 | Piece | Purpose | Approx. cost |
 |-------|---------|--------------|
-| Project `agent-workbench` | Container for everything below | Free |
+| Project `agent-workbench-tray` | Container for everything below | Free |
 | Budget alert ($10/month) | Email warning before credits drain | Free |
 | VM `agent-workbench` (`e2-small`, `us-central1-a`) | Linux workbench where agents work on the repos | ~$0.017/hr **only while running**, plus ~$1.20/mo disk |
 | Translation API key | Used by the Pornolab translator userscript (in Tampermonkey) | 500k characters/month free, then from credits |
@@ -45,13 +45,13 @@ Billing → Credits** and read out the credit amount and **expiration date**.
 
 ## Step 1: Create the project and link billing
 
-Project IDs must be globally unique, so add a short suffix:
+Project ID chosen by the user: `agent-workbench-tray` (if taken, use `agent-workbench-tray1`).
 
 ```powershell
-gcloud projects create agent-workbench-XXXX --name="agent-workbench"
-gcloud config set project agent-workbench-XXXX
+gcloud projects create agent-workbench-tray --name="agent-workbench"
+gcloud config set project agent-workbench-tray
 gcloud billing accounts list
-gcloud billing projects link agent-workbench-XXXX --billing-account=BILLING_ACCOUNT_ID
+gcloud billing projects link agent-workbench-tray --billing-account=BILLING_ACCOUNT_ID
 ```
 
 ## Step 2: Budget alert (do this BEFORE creating anything billable)
@@ -174,7 +174,7 @@ It gets pasted into Tampermonkey in lesson 4.
 Keep one Owner. Add others with limited roles:
 
 ```powershell
-gcloud projects add-iam-policy-binding agent-workbench-XXXX `
+gcloud projects add-iam-policy-binding agent-workbench-tray `
   --member=user:OTHER@gmail.com --role=roles/editor
 ```
 
