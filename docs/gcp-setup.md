@@ -16,6 +16,26 @@ costs money** (marked 💲).
 
 The VM is **started only when we're working** and stopped afterwards.
 
+## Status (2026-10-06)
+
+Steps 0–8 are done on project `agent-workbench-tray` (free trial: $300 credit,
+expires 2026-12-29). Step 9 is not done (optional).
+
+**Open item, before lesson 4:** the Translation daily character cap (Step 8)
+is not set yet. See Step 8.
+
+What differed from the plan:
+
+- **cc's auto mode blocks most changes in the cloud** (linking billing, enabling
+  APIs, creating network/IAM resources, merging PRs). cc explains each command
+  and the user runs it with `!`. cc runs the read-only checks (`list`, `describe`).
+- **Long commands pasted into cc's `!` prompt can wrap and split into two
+  commands.** That happened on Step 5: the VM was created with the default
+  service account and a 10 GB disk, so it was deleted and recreated. Long
+  commands now live in `scripts/` (`create-vm.sh`, `setup-autostop.sh`).
+- **gcloud commands go on the PC, never on the VM.** The VM has no Google Cloud
+  login on purpose. Don't run `gcloud auth login` there.
+
 ## Privacy rules (must follow)
 
 - The VM **never visits Pornolab** and never uses the user's Pornolab login.
@@ -110,6 +130,11 @@ gcloud compute instances create agent-workbench `
   permissions, so an agent on it can't create or delete cloud resources.
 - `enable-oslogin`: SSH access is tied to the user's Google account.
 
+Run it as `bash scripts/create-vm.sh` (same command, safe from line wrapping).
+Check afterwards with `gcloud compute instances describe agent-workbench
+--zone=us-central1-a --format="yaml(serviceAccounts,disks[0].diskSizeGb)"`:
+there should be **no** `serviceAccounts` block and the disk should be 30 GB.
+
 ## Step 6: Connect and install tools on the VM
 
 ```powershell
@@ -135,6 +160,14 @@ npx -y playwright install --with-deps chromium
 Then clone the repos (`traylespud/traylespud`, `traylespud/userscripts`) and
 run `claude` to sign in.
 
+Done this way: `sudo apt-get install -y gh`, then `gh auth login` with a
+**fine-grained GitHub token** limited to those two repos (Contents: read and
+write, 90-day expiry), so the VM can't reach the user's other repos. Repos are
+in `~/code/`.
+
+PuTTY: right-click pastes. To use Windows Terminal instead, see the SSH config
+in `docs/gcloud-notes.md`.
+
 Teach the user `tmux`: `tmux new -s work` starts a session; `Ctrl+B` then
 `D` detaches (it keeps running); `tmux attach -t work` reconnects.
 
@@ -155,6 +188,12 @@ gcloud compute instances stop agent-workbench --zone=us-central1-a
 Optional safety net: a nightly auto-stop schedule (an instance schedule
 resource policy). Ask the user for their time zone first.
 
+Done: `bash scripts/setup-autostop.sh` creates `workbench-nightly-stop`, which
+stops the VM at **20:00 America/Toronto** daily and never starts it. The
+schedule runs as Google's Compute Engine service agent, which needs permission
+to stop VMs. The script grants it a custom role (`vmScheduler`) holding only
+`compute.instances.start` and `compute.instances.stop`.
+
 ## Step 8: Translation API key
 
 ```powershell
@@ -168,6 +207,18 @@ character cap** (e.g. 50,000/day) so a bug can't burn through credits.
 
 Show the user where the key is, but **don't save it in any file in a repo**.
 It gets pasted into Tampermonkey in lesson 4.
+
+Done this way:
+
+- Create the key in a **separate PowerShell window, not with `!` in cc**, so
+  the key never appears in the cc conversation. It's stored in KeePassXC only.
+  To copy it later without showing it, run
+  `gcloud services api-keys get-key-string <name> --format="value(keyString)" | Set-Clipboard`.
+- ⏸️ **The daily cap is not set yet.** In the console, "v2 and v3 general model
+  characters per day" shows *Unlimited* with **Adjustable: No**, so it can't be
+  edited there. Before lesson 4, set a 50,000/day consumer quota override with
+  `gcloud alpha services quota` (run `gcloud components install alpha` first).
+  The key isn't used by anything until then, so nothing can spend through it.
 
 ## Step 9 (optional): Extra Gmail accounts
 

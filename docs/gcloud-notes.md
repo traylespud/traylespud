@@ -16,6 +16,7 @@ the end of a line means "this command continues on the next line").
 | VM size | `e2-small` (2 GB RAM) |
 | Network | `workbench-net` (SSH through IAP only) |
 | Budget alert | $10/month, emails at 50%, 90%, 100% |
+| Auto-stop | `workbench-nightly-stop`: stops the VM at 20:00 Toronto time daily (never starts it). Set up by `scripts/setup-autostop.sh` |
 
 ## Everyday commands
 
@@ -85,3 +86,36 @@ gcloud can't show a simple "how much have I spent" number. Use the console:
 <!-- Add notes here as you go. Example:
 - 2026-10-05: If ssh hangs, check the VM is started with `gcloud compute instances list`.
 -->
+- 2026-10-03: **Pasting long commands into cc's `!` prompt** can wrap onto two lines,
+  which runs them as two broken commands. Keep long commands in a script
+  (e.g. `bash scripts/create-vm.sh`) or paste them in shorter pieces.
+- 2026-10-03: **In PuTTY, right-click pastes** (Ctrl+V doesn't).
+- 2026-10-03: **gcloud commands go on the PC, not the VM.** The VM has no Google
+  Cloud login or permissions on purpose, so gcloud there just errors. Never run
+  `gcloud auth login` on the VM. If the prompt says `...@agent-workbench`, you're on the VM.
+- 2026-10-06: **Translation daily cap isn't editable in the console.** "v2 and v3 general
+  model characters per day" shows Unlimited / Adjustable: No. **TODO before lesson 4**
+  (before the key goes into Tampermonkey): set it to 50,000/day with a quota override
+  via `gcloud alpha services quota` (needs `gcloud components install alpha`).
+- 2026-10-06: API key `thorium-translator` lives in KeePassXC only. It's restricted to
+  `translate.googleapis.com`. Copy it to the clipboard without showing it:
+  `gcloud services api-keys get-key-string <name> --format="value(keyString)" | Set-Clipboard`
+- 2026-10-03: A stopped VM shows as **`TERMINATED`** in `gcloud compute instances list`.
+  That just means stopped; nothing is deleted.
+
+### Later: SSH from Windows Terminal instead of PuTTY
+
+Windows has `ssh` built in, and gcloud already made the key. Run
+`notepad $HOME\.ssh\config`, paste this, and save:
+
+```
+Host workbench
+    HostName agent-workbench
+    User samashukur_gmail_com
+    IdentityFile ~/.ssh/google_compute_engine
+    ProxyCommand "C:\Users\yachiru\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin\gcloud.cmd" compute start-iap-tunnel %h %p --listen-on-stdin --project=agent-workbench-tray --zone=us-central1-a --verbosity=warning
+    ServerAliveInterval 60
+```
+
+Then connect with `ssh workbench` (start the VM first). It still goes through
+the IAP tunnel, so nothing new is opened to the internet.
