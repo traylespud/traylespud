@@ -45,3 +45,11 @@ Just ask, for example *"cc, let's do lesson 1"*. Each lesson will include:
 - small, well-commented code examples
 - a hands-on exercise in Thorium
 - a short "check yourself" section with a few questions
+
+## Side tracks
+
+Separate from the userscript lessons above:
+
+- [`dotnet-winforms-to-net10/`](dotnet-winforms-to-net10/LESSON.md): move a small Windows
+  Forms app from .NET Framework 4.8 to .NET 10. Background notes are in
+  [`../docs/dotnet-migration-notes.md`](../docs/dotnet-migration-notes.md).

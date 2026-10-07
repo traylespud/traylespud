@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    STARTER PROJECT: a small "classic" Windows Forms app on .NET Framework 4.8.
+    Your job in the lesson is to move it to .NET 10. Keep this folder untouched
+    and do your work in a copy (see LESSON.md).
+  -->
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>ClickCounter</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- .NET Framework ships System.Configuration "in the box". .NET 10 does not. -->
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+
+</Project>
