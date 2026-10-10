@@ -45,3 +45,10 @@ installed version), then the official reference at
 cloud.google.com/sdk/gcloud/reference. Explain in plain language, and say
 whether a command costs money before running it. Keep `docs/gcloud-notes.md`
 (the user's personal cheat sheet) up to date when something new is learned.
+
+## GigaDrive seedbox
+
+The user has a GigaRapid **GigaDrive Gold G10** seedbox. Their PC ↔ seedbox
+transfer plan is in `docs/gigadrive-transfers.md`. Which apps each plan can
+install, plus the list of quota-exempt apps, is in
+`reference/gigadrive-apps-by-plan.md`. Check both before recommending apps.
